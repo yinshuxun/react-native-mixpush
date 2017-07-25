@@ -1,5 +1,7 @@
 # react-native-mixpush
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/yinshuxun/react-native-mixpush.svg)](https://greenkeeper.io/)
+
 集成了小米推送和极光推送，可以任意选择或者匹配规则，默认规则是小米手机采用小米推送，其他一律使用极光推送
 
 ## 使用
