@@ -1,0 +1,26 @@
+{
+  "name": "react-native-mixpush",
+  "version": "0.0.2",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yinshuxun/react-native-mixpush"
+  },
+  "keywords": [
+    "react-native",
+    "push",
+    "component",
+    "jpush",
+    "mipush"
+  ],
+  "author": "yinshuxun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yinshuxun/react-native-mic-mixpush/issues"
+  },
+  "homepage": "https://github.com/yinshuxun/react-native-mixpush"
+}
