@@ -9,9 +9,14 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        manifestPlaceholders = [
+                JPUSH_APPKEY: "913c24e53c0d7ede41e828ae",   //在此替换你的APPKey
+                APP_CHANNEL: "developer-default",        //应用渠道号
+                MI_APPID: "2882303761517599402",
+                MI_APPKEY: "5351759930402"
+        ]
     }
     buildTypes {
         release {
@@ -19,6 +24,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    //jcore 需要的配置
+    lintOptions {
+        abortOnError false
+        warning 'InvalidPackage'
+    }
+    //jcore 需要的配置
+    sourceSets.main {
+        jniLibs.srcDirs = ['libs']
+    }
+}
+
+//jcore 需要的配置
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -26,6 +45,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
+    compile "com.facebook.react:react-native:+"
 }
