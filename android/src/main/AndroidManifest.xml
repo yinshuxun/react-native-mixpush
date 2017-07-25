@@ -173,7 +173,7 @@
         <service android:name="com.xiaomi.mipush.sdk.MessageHandleService"
             android:enabled="true" />
 
-        <receiver android:name=".miPush.MixPushMessageReceiver"
+        <receiver android:name=".miPush.MiPushMessageReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.xiaomi.mipush.RECEIVE_MESSAGE" />

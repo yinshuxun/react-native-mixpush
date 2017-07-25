@@ -11,12 +11,6 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        manifestPlaceholders = [
-                JPUSH_APPKEY: "913c24e53c0d7ede41e828ae",   //在此替换你的APPKey
-                APP_CHANNEL: "developer-default",        //应用渠道号
-                MI_APPID: "2882303761517599402",
-                MI_APPKEY: "5351759930402"
-        ]
     }
     buildTypes {
         release {

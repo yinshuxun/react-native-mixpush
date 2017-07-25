@@ -18,7 +18,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.shuxun.react_native_mixpush.ExampleUtil;
+import com.shuxun.react_native_mixpush.mixPushUtil;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -71,22 +71,22 @@ public class JPushModule extends ReactContextBaseJavaModule {
     public void initPush() {
         mContext = getCurrentActivity();
         JPushInterface.init(getReactApplicationContext());
-        Logger.toast(mContext, "AppKey:" + ExampleUtil.getMiAppId(getReactApplicationContext()));
+        Logger.toast(mContext, "AppKey:" + mixPushUtil.getMiAppId(getReactApplicationContext()));
         Logger.i(TAG, "init Success!");
     }
 
     @ReactMethod
     public void getInfo(Callback successCallback) {
         WritableMap map = Arguments.createMap();
-        String appKey = "AppKey:" + ExampleUtil.getAppKey(getReactApplicationContext());
+        String appKey = "AppKey:" + mixPushUtil.getAppKey(getReactApplicationContext());
         map.putString("myAppKey", appKey);
-        String imei = "IMEI: " + ExampleUtil.getImei(getReactApplicationContext(), "");
+        String imei = "IMEI: " + mixPushUtil.getImei(getReactApplicationContext(), "");
         map.putString("myImei", imei);
         String packageName = "PackageName: " + getReactApplicationContext().getPackageName();
         map.putString("myPackageName", packageName);
-        String deviceId = "DeviceId: " + ExampleUtil.getDeviceId(getReactApplicationContext());
+        String deviceId = "DeviceId: " + mixPushUtil.getDeviceId(getReactApplicationContext());
         map.putString("myDeviceId", deviceId);
-        String version = "Version: " + ExampleUtil.GetVersion(getReactApplicationContext());
+        String version = "Version: " + mixPushUtil.GetVersion(getReactApplicationContext());
         map.putString("myVersion", version);
         successCallback.invoke(map);
     }
@@ -161,7 +161,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
         if (strArray.size() > 0) {
             Set<String> tagSet = new LinkedHashSet<>();
             for (int i = 0; i < strArray.size(); i++) {
-                if (!ExampleUtil.isValidTagAndAlias(strArray.getString(i))) {
+                if (!mixPushUtil.isValidTagAndAlias(strArray.getString(i))) {
                     Logger.toast(mContext, "Invalid tag !");
                     return;
                 }
@@ -301,7 +301,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
             if (tagArray.size() > 0) {
                 Set<String> tagSet = new LinkedHashSet<>();
                 for (int i = 0; i < tagArray.size(); i++) {
-                    if (!ExampleUtil.isValidTagAndAlias(tagArray.getString(i))) {
+                    if (!mixPushUtil.isValidTagAndAlias(tagArray.getString(i))) {
                         Logger.toast(mContext, "Invalid tag !");
                         return;
                     }

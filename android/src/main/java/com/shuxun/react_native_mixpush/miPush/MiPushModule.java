@@ -2,11 +2,10 @@ package com.shuxun.react_native_mixpush.miPush;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.shuxun.react_native_mixpush.ExampleUtil;
+import com.shuxun.react_native_mixpush.mixPushUtil;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
@@ -15,10 +14,10 @@ import com.xiaomi.mipush.sdk.MiPushClient;
  * Created by shuxun on 2017/7/24.
  */
 
-public class MixPushModule extends ReactContextBaseJavaModule {
+public class MiPushModule extends ReactContextBaseJavaModule {
 
 
-    public MixPushModule(ReactApplicationContext reactContext) {
+    public MiPushModule(ReactApplicationContext reactContext) {
         super(reactContext);
         initXiaomiPush();
     }
@@ -40,8 +39,8 @@ public class MixPushModule extends ReactContextBaseJavaModule {
         // 注册push服务，注册成功后会向DemoMessageReceiver发送广播
         // 可以从DemoMessageReceiver的onCommandResult方法中MiPushCommandMessage对象参数中获取注册信息
         //小米消息推送APP_ID ，APP_KEY
-        String APP_ID = ExampleUtil.getMiAppId(getReactApplicationContext());
-        String APP_KEY = ExampleUtil.getMiAppKey(getReactApplicationContext());
+        String APP_ID = mixPushUtil.getMiAppId(getReactApplicationContext());
+        String APP_KEY = mixPushUtil.getMiAppKey(getReactApplicationContext());
 //        String APP_ID = "2882303761517599402";
 //        String APP_KEY = "5351759930402";
 

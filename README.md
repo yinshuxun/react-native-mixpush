@@ -11,7 +11,7 @@ yarn add react-native-mixpush --save
 ```
 react-native link
 ```
-然后查看 mixpush 的 build.gradle 文件,替换对应你自己的配置
+修改app 的 build.gradle 文件,替换对应你通知的配置
 ```
 manifestPlaceholders = [
                 JPUSH_APPKEY: "913c24e53c0d7ede41e828ae",   //替换你的极光APPKey

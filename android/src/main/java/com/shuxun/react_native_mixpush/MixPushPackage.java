@@ -1,4 +1,4 @@
-package com.shuxun.react_native_mixpush.miPush;
+package com.shuxun.react_native_mixpush;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
@@ -6,6 +6,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.shuxun.react_native_mixpush.jPush.JPushModule;
+import com.shuxun.react_native_mixpush.miPush.MiPushModule;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,7 +20,7 @@ public class MixPushPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.asList(new NativeModule[]{
-                new MixPushModule(reactContext),
+                new MiPushModule(reactContext),
                 new JPushModule(reactContext)
         });
     }
