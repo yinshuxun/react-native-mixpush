@@ -23,5 +23,25 @@
   "bugs": {
     "url": "https://github.com/yinshuxun/react-native-mic-mixpush/issues"
   },
-  "homepage": "https://github.com/yinshuxun/react-native-mixpush"
+  "homepage": "https://github.com/yinshuxun/react-native-mixpush",
+  "peerDependencies": {
+		"jcore-react-native": ">= 1.1.5"
+	},
+	"rnpm": {
+		"ios": {
+			"sharedLibraries": [
+				"libz",
+				"UserNotifications",
+				"CoreTelephony",
+				"Security",
+				"CFNetwork",
+				"CoreFoundation",
+				"SystemConfiguration",
+				"Foundation",
+				"UIKit",
+				"libresolv",
+				"CoreGraphics"
+			]
+		}
+	}
 }
