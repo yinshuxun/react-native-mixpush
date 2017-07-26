@@ -2,9 +2,10 @@
   "name": "react-native-mixpush",
   "version": "0.0.3",
   "description": "",
-  "main": "",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "postinstall": "node postInstall.js"
   },
   "repository": {
     "type": "git",
