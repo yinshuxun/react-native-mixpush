@@ -44,6 +44,10 @@ public class mixPushUtil {
         return m.matches();
     }
 
+    public static String getPhoneInfo(){
+        return  "";
+    }
+
     public static String getMiAppId(Context context) {
         return getMetaKey(context, MI_APPID);
     }

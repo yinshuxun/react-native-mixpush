@@ -71,7 +71,6 @@ public class JPushModule extends ReactContextBaseJavaModule {
     public void initPush() {
         mContext = getCurrentActivity();
         JPushInterface.init(getReactApplicationContext());
-        Logger.toast(mContext, "AppKey:" + mixPushUtil.getMiAppId(getReactApplicationContext()));
         Logger.i(TAG, "init Success!");
     }
 
