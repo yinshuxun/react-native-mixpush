@@ -52,7 +52,7 @@ getPackageJson("./../..", function (f, s) {
     }
 
     if (searchKey != null) {
-      rf = rf.replace(searchKey[0], searchKey[0] + "    \"configureJPush\"\: \"node node_modules\/react-native-mixpush\/MixPushConfiguration\.js\"\,\n");
+      rf = rf.replace(searchKey[0], searchKey[0] + "    \"configureMixPush\"\: \"node node_modules\/react-native-mixpush\/MixPushConfiguration\.js\"\,\n");
       fs.writeFileSync(f, rf, "utf-8");
     }
   }

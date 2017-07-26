@@ -14,11 +14,11 @@ yarn add react-native-mixpush --save
 
 - 执行脚本
 ```
-npm run configureJPush <yourModuleName> <yourAppKey> <yourmiId> <yourmiKey>
+npm run configureMixPush <yourAppKey> <yourmiId> <yourmiKey> <yourModuleName> 
 //module name 指的是你 Android 项目中的模块名字
 
 //举个例子:
-npm run configureJPush micrndemo 913c24e53c0d7ede41e828ae 2882303761517599402 5351759930402
+npm run configureMixPush 913c24e53c0d7ede41e828ae 2882303761517599402 5351759930402 app
 ```
 
 - Link 项目

@@ -5,11 +5,7 @@ var os = require('os');
 
 // add other link flag
 
-// console.log(process.env.npm_package_scripts_configureJPush.split(" ").splice(2)[1])
-// if(true){
-// return console.log("结束");
-// }
-const proArgvs = process.env.npm_package_scripts_configureJPush.replace(/\"/g, "").split(" ").splice(2);
+const proArgvs = process.env.npm_package_scripts_configureMixPush.replace(/\"/g, "").split(" ").splice(2);
 
 var moduleName = proArgvs[3];
 if (moduleName == undefined || moduleName == null) {
