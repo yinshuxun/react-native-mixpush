@@ -40,7 +40,8 @@
 				"Foundation",
 				"UIKit",
 				"libresolv",
-				"CoreGraphics"
+        "CoreGraphics",
+        "Usernotifications"
 			]
 		}
 	}
