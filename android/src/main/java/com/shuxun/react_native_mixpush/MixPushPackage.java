@@ -22,13 +22,15 @@ public class MixPushPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        if (Rom.isMiui()) {
-            Log.e("ROM", "miui");
-            modules.add(new MiPushModule(reactContext));
-        } else {
-            Log.e("ROM", "other");
-            modules.add(new JPushModule(reactContext));
-        }
+//        if (Rom.isMiui()) {
+//            Log.e("ROM", "miui");
+//            modules.add(new MiPushModule(reactContext));
+//        } else {
+//            Log.e("ROM", "other");
+//            modules.add(new JPushModule(reactContext));
+//        }
+        modules.add(new MiPushModule(reactContext));
+        modules.add(new JPushModule(reactContext));
         return modules;
     }
 

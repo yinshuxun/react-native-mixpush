@@ -1,10 +1,10 @@
-package com.shuxun.react_native_mixpush.jPush;
+package com.shuxun.react_native_mixpush;
 
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-public class Logger {
+public class MixLogger {
 
     public static boolean SHUTDOWNLOG;
     public static boolean SHUTDOWNTOAST;

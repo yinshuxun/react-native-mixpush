@@ -18,6 +18,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.shuxun.react_native_mixpush.MixLogger;
 import com.shuxun.react_native_mixpush.mixPushUtil;
 
 import java.util.LinkedHashSet;
@@ -71,7 +72,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
     public void initPush() {
         mContext = getCurrentActivity();
         JPushInterface.init(getReactApplicationContext());
-        Logger.i(TAG, "init Success!");
+        MixLogger.i(TAG, "init Success!");
     }
 
     @ReactMethod
@@ -94,16 +95,16 @@ public class JPushModule extends ReactContextBaseJavaModule {
     public void stopPush() {
         mContext = getCurrentActivity();
         JPushInterface.stopPush(getReactApplicationContext());
-        Logger.i(TAG, "Stop push");
-        Logger.toast(mContext, "Stop push success");
+        MixLogger.i(TAG, "Stop push");
+        MixLogger.toast(mContext, "Stop push success");
     }
 
     @ReactMethod
     public void resumePush() {
         mContext = getCurrentActivity();
         JPushInterface.resumePush(getReactApplicationContext());
-        Logger.i(TAG, "Resume push");
-        Logger.toast(mContext, "Resume push success");
+        MixLogger.i(TAG, "Resume push");
+        MixLogger.toast(mContext, "Resume push success");
     }
 
     @ReactMethod
@@ -118,7 +119,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
 
     private static void sendEvent() {
         if (mEvent != null) {
-            Logger.i(TAG, "Sending event : " + mEvent);
+            MixLogger.i(TAG, "Sending event : " + mEvent);
             switch (mEvent) {
                 case RECEIVE_CUSTOM_MESSAGE:
                     WritableMap map = Arguments.createMap();
@@ -156,12 +157,12 @@ public class JPushModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setTags(final ReadableArray strArray, final Callback callback) {
         mContext = getCurrentActivity();
-        Logger.i(TAG, "tag: " + strArray.toString());
+        MixLogger.i(TAG, "tag: " + strArray.toString());
         if (strArray.size() > 0) {
             Set<String> tagSet = new LinkedHashSet<>();
             for (int i = 0; i < strArray.size(); i++) {
                 if (!mixPushUtil.isValidTagAndAlias(strArray.getString(i))) {
-                    Logger.toast(mContext, "Invalid tag !");
+                    MixLogger.toast(mContext, "Invalid tag !");
                     return;
                 }
                 tagSet.add(strArray.getString(i));
@@ -176,43 +177,43 @@ public class JPushModule extends ReactContextBaseJavaModule {
                             // dialog.dismiss();
                             switch (status) {
                                 case 0:
-                                    Logger.i(TAG, "Set tag success. tag: " + strArray.toString());
-                                    Logger.toast(getReactApplicationContext(), "Set tag success");
+                                    MixLogger.i(TAG, "Set tag success. tag: " + strArray.toString());
+                                    MixLogger.toast(getReactApplicationContext(), "Set tag success");
                                     callback.invoke(0);
                                     break;
                                 case 6002:
-                                    Logger.i(TAG, "Set tag timeout");
-                                    Logger.toast(getReactApplicationContext(),
+                                    MixLogger.i(TAG, "Set tag timeout");
+                                    MixLogger.toast(getReactApplicationContext(),
                                             "Set tag timeout, check your network");
                                     callback.invoke("Set tag timeout");
                                     break;
                                 default:
-                                    Logger.toast(getReactApplicationContext(),
+                                    MixLogger.toast(getReactApplicationContext(),
                                             "Error code: " + status);
                                     callback.invoke("Set tag failed. Error code: " + status);
                             }
                         }
                     });
         } else {
-            Logger.toast(mContext, "Empty tag, try to cancel tags ");
-            Logger.i(TAG, "Empty tag, will cancel early settings");
+            MixLogger.toast(mContext, "Empty tag, try to cancel tags ");
+            MixLogger.i(TAG, "Empty tag, will cancel early settings");
             JPushInterface.setTags(getReactApplicationContext(), new LinkedHashSet<String>(), new TagAliasCallback() {
                 @Override
                 public void gotResult(int status, String desc, Set<String> set) {
                     switch (status) {
                         case 0:
-                            Logger.i(TAG, "Cancel tag success. ");
-                            Logger.toast(getReactApplicationContext(), "Cancel tag success");
+                            MixLogger.i(TAG, "Cancel tag success. ");
+                            MixLogger.toast(getReactApplicationContext(), "Cancel tag success");
                             callback.invoke(0);
                             break;
                         case 6002:
-                            Logger.i(TAG, "Set tag timeout");
-                            Logger.toast(getReactApplicationContext(),
+                            MixLogger.i(TAG, "Set tag timeout");
+                            MixLogger.toast(getReactApplicationContext(),
                                     "Set tag timeout, check your network");
                             callback.invoke("Set tag timeout");
                             break;
                         default:
-                            Logger.toast(getReactApplicationContext(),
+                            MixLogger.toast(getReactApplicationContext(),
                                     "Error code: " + status);
                             callback.invoke("Set tag failed. Error code: " + status);
                     }
@@ -233,7 +234,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
     public void setAlias(String str, final Callback callback) {
         mContext = getCurrentActivity();
         final String alias = str.trim();
-        Logger.i(TAG, "alias: " + alias);
+        MixLogger.i(TAG, "alias: " + alias);
         if (!TextUtils.isEmpty(alias)) {
             JPushInterface.setAlias(getReactApplicationContext(), alias,
                     new TagAliasCallback() {
@@ -241,42 +242,42 @@ public class JPushModule extends ReactContextBaseJavaModule {
                         public void gotResult(int status, String desc, Set<String> set) {
                             switch (status) {
                                 case 0:
-                                    Logger.i(TAG, "Set alias success");
-                                    Logger.toast(getReactApplicationContext(), "Set alias success");
+                                    MixLogger.i(TAG, "Set alias success");
+                                    MixLogger.toast(getReactApplicationContext(), "Set alias success");
                                     callback.invoke(0);
                                     break;
                                 case 6002:
-                                    Logger.i(TAG, "Set alias timeout");
-                                    Logger.toast(getReactApplicationContext(),
+                                    MixLogger.i(TAG, "Set alias timeout");
+                                    MixLogger.toast(getReactApplicationContext(),
                                             "set alias timeout, check your network");
                                     callback.invoke("Set alias timeout");
                                     break;
                                 default:
-                                    Logger.toast(getReactApplicationContext(), "Error code: " + status);
+                                    MixLogger.toast(getReactApplicationContext(), "Error code: " + status);
                                     callback.invoke("Set alias failed. Error code: " + status);
                             }
                         }
                     });
         } else {
-            Logger.toast(mContext, "Empty alias ");
-            Logger.i(TAG, "Empty alias, will cancel early alias setting");
+            MixLogger.toast(mContext, "Empty alias ");
+            MixLogger.i(TAG, "Empty alias, will cancel early alias setting");
             JPushInterface.setAlias(getReactApplicationContext(), "", new TagAliasCallback() {
                 @Override
                 public void gotResult(int status, String desc, Set<String> set) {
                     switch (status) {
                         case 0:
-                            Logger.i(TAG, "Cancel alias success");
-                            Logger.toast(getReactApplicationContext(), "Cancel alias success");
+                            MixLogger.i(TAG, "Cancel alias success");
+                            MixLogger.toast(getReactApplicationContext(), "Cancel alias success");
                             callback.invoke(0);
                             break;
                         case 6002:
-                            Logger.i(TAG, "Set alias timeout");
-                            Logger.toast(getReactApplicationContext(),
+                            MixLogger.i(TAG, "Set alias timeout");
+                            MixLogger.toast(getReactApplicationContext(),
                                     "set alias timeout, check your network");
                             callback.invoke("Set alias timeout");
                             break;
                         default:
-                            Logger.toast(getReactApplicationContext(), "Error code: " + status);
+                            MixLogger.toast(getReactApplicationContext(), "Error code: " + status);
                             callback.invoke("Set alias failed. Error code: " + status);
                     }
                 }
@@ -296,12 +297,12 @@ public class JPushModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setAliasAndTags(String alias, ReadableArray tagArray, final Callback callback) {
         if (tagArray != null) {
-            Logger.i(TAG, "tag: " + tagArray.toString());
+            MixLogger.i(TAG, "tag: " + tagArray.toString());
             if (tagArray.size() > 0) {
                 Set<String> tagSet = new LinkedHashSet<>();
                 for (int i = 0; i < tagArray.size(); i++) {
                     if (!mixPushUtil.isValidTagAndAlias(tagArray.getString(i))) {
-                        Logger.toast(mContext, "Invalid tag !");
+                        MixLogger.toast(mContext, "Invalid tag !");
                         return;
                     }
                     tagSet.add(tagArray.getString(i));
@@ -311,69 +312,69 @@ public class JPushModule extends ReactContextBaseJavaModule {
                     public void gotResult(int status, String desc, Set<String> set) {
                         switch (status) {
                             case 0:
-                                Logger.i(TAG, "Set alias and tags success");
-                                Logger.toast(getReactApplicationContext(), "Set alias and tags success");
+                                MixLogger.i(TAG, "Set alias and tags success");
+                                MixLogger.toast(getReactApplicationContext(), "Set alias and tags success");
                                 callback.invoke(0);
                                 break;
                             case 6002:
-                                Logger.i(TAG, "Set alias timeout");
-                                Logger.toast(getReactApplicationContext(),
+                                MixLogger.i(TAG, "Set alias timeout");
+                                MixLogger.toast(getReactApplicationContext(),
                                         "set alias timeout, check your network");
                                 callback.invoke("Set alias timeout");
                                 break;
                             default:
-                                Logger.toast(getReactApplicationContext(), "Error code: " + status);
-                                Logger.i(TAG, "Set alias and tags failed, error code: " + status);
+                                MixLogger.toast(getReactApplicationContext(), "Error code: " + status);
+                                MixLogger.i(TAG, "Set alias and tags failed, error code: " + status);
                                 callback.invoke("Set alias and tags failed. Error code: " + status);
                         }
                     }
                 });
             } else {
-                Logger.i(TAG, "Calling setAliasAndTags, tags is empty, will cancel tags settings");
+                MixLogger.i(TAG, "Calling setAliasAndTags, tags is empty, will cancel tags settings");
                 JPushInterface.setAliasAndTags(getReactApplicationContext(), alias, new LinkedHashSet<String>(),
                         new TagAliasCallback() {
                             @Override
                             public void gotResult(int status, String s, Set<String> set) {
                                 switch (status) {
                                     case 0:
-                                        Logger.i(TAG, "Set alias and tags success");
-                                        Logger.toast(getReactApplicationContext(), "Set alias and tags success");
+                                        MixLogger.i(TAG, "Set alias and tags success");
+                                        MixLogger.toast(getReactApplicationContext(), "Set alias and tags success");
                                         callback.invoke(0);
                                         break;
                                     case 6002:
-                                        Logger.i(TAG, "Set alias timeout");
-                                        Logger.toast(getReactApplicationContext(),
+                                        MixLogger.i(TAG, "Set alias timeout");
+                                        MixLogger.toast(getReactApplicationContext(),
                                                 "set alias timeout, check your network");
                                         callback.invoke("Set alias timeout");
                                         break;
                                     default:
-                                        Logger.toast(getReactApplicationContext(), "Error code: " + status);
-                                        Logger.i(TAG, "Set alias and tags failed, error code: " + status + " error message: " + s);
+                                        MixLogger.toast(getReactApplicationContext(), "Error code: " + status);
+                                        MixLogger.i(TAG, "Set alias and tags failed, error code: " + status + " error message: " + s);
                                         callback.invoke("Set alias and tags failed. Error code: " + status);
                                 }
                             }
                         });
             }
         } else {
-            Logger.i(TAG, "Tag array is null, will not set tag this time.");
+            MixLogger.i(TAG, "Tag array is null, will not set tag this time.");
             JPushInterface.setAliasAndTags(getReactApplicationContext(), alias, null, new TagAliasCallback() {
                 @Override
                 public void gotResult(int status, String s, Set<String> set) {
                     switch (status) {
                         case 0:
-                            Logger.i(TAG, "Set alias and tags success");
-                            Logger.toast(getReactApplicationContext(), "Set alias and tags success");
+                            MixLogger.i(TAG, "Set alias and tags success");
+                            MixLogger.toast(getReactApplicationContext(), "Set alias and tags success");
                             callback.invoke(0);
                             break;
                         case 6002:
-                            Logger.i(TAG, "Set alias timeout");
-                            Logger.toast(getReactApplicationContext(),
+                            MixLogger.i(TAG, "Set alias timeout");
+                            MixLogger.toast(getReactApplicationContext(),
                                     "set alias timeout, check your network");
                             callback.invoke("Set alias timeout");
                             break;
                         default:
-                            Logger.toast(getReactApplicationContext(), "Error code: " + status);
-                            Logger.i(TAG, "Set alias and tags failed, error code: " + status + " error message: " + s);
+                            MixLogger.toast(getReactApplicationContext(), "Error code: " + status);
+                            MixLogger.i(TAG, "Set alias and tags failed, error code: " + status + " error message: " + s);
                             callback.invoke("Set alias and tags failed. Error code: " + status);
                     }
                 }
@@ -393,9 +394,9 @@ public class JPushModule extends ReactContextBaseJavaModule {
             builder.notificationFlags = Notification.FLAG_AUTO_CANCEL;  //设置为点击后自动消失
             builder.notificationDefaults = Notification.DEFAULT_SOUND;  //设置为铃声（ Notification.DEFAULT_SOUND）或者震动（ Notification.DEFAULT_VIBRATE）
             JPushInterface.setPushNotificationBuilder(1, builder);
-            Logger.toast(mContext, "Basic Builder - 1");
+            MixLogger.toast(mContext, "Basic Builder - 1");
         } else {
-            Logger.d(TAG, "Current activity is null, discard event");
+            MixLogger.d(TAG, "Current activity is null, discard event");
         }
     }
 
@@ -413,7 +414,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
         builder.layoutIconDrawable = IdHelper.getDrawable(mContext, "ic_launcher");
         builder.developerArg0 = "developerArg2";
         JPushInterface.setPushNotificationBuilder(2, builder);
-        Logger.toast(mContext, "Custom Builder - 2");
+        MixLogger.toast(mContext, "Custom Builder - 2");
     }
 
     /**
@@ -471,7 +472,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
             if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(data.getAction())) {
                 try {
                     String message = data.getStringExtra(JPushInterface.EXTRA_MESSAGE);
-                    Logger.i(TAG, "收到自定义消息: " + message);
+                    MixLogger.i(TAG, "收到自定义消息: " + message);
                     mEvent = RECEIVE_CUSTOM_MESSAGE;
                     if (mRAC != null) {
                         sendEvent();
@@ -485,7 +486,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
                     String alertContent = mCachedBundle.getString(JPushInterface.EXTRA_ALERT);
                     // extra 字段的 json 字符串
                     String extras = mCachedBundle.getString(JPushInterface.EXTRA_EXTRA);
-                    Logger.i(TAG, "收到推送下来的通知: " + alertContent);
+                    MixLogger.i(TAG, "收到推送下来的通知: " + alertContent);
                     mEvent = RECEIVE_NOTIFICATION;
                     if (mRAC != null) {
                         sendEvent();
@@ -495,7 +496,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
                 }
             } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(data.getAction())) {
                 try {
-                    Logger.d(TAG, "用户点击打开了通知");
+                    MixLogger.d(TAG, "用户点击打开了通知");
                     // 通知内容
                     String alertContent = mCachedBundle.getString(JPushInterface.EXTRA_ALERT);
                     // extra 字段的 json 字符串
@@ -517,7 +518,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Logger.i(TAG, "Shouldn't access here");
+                    MixLogger.i(TAG, "Shouldn't access here");
                 }
                 // 应用注册完成后会发送广播，在 JS 中 JPushModule.addGetRegistrationIdListener 接口可以第一时间得到 registrationId
                 // After JPush finished registering, will send this broadcast, use JPushModule.addGetRegistrationIdListener
@@ -550,7 +551,7 @@ public class JPushModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void jumpToPushActivity(String activityName) {
-        Logger.d(TAG, "Jumping to " + activityName);
+        MixLogger.d(TAG, "Jumping to " + activityName);
         try {
             Intent intent = new Intent();
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
