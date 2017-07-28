@@ -152,6 +152,156 @@ function insertJpushCode(path) {
     }
 }
 
+function insertRCTPushCode(path) {
+    // 	 这个是插入代码的脚本 install
+    if (isFile(path) == false) {
+        console.log("configuration JPush error!!");
+        return;
+    }
+
+    var rf = fs.readFileSync(path, "utf-8");
+    // 删除所有的 RCTPushNotificationManager 相关代码  注册推送的没有删除，
+    rf = rf.replace(/\n\#import \<RCTPushNotificationManager.h\>/, "");
+    rf = rf.replace(/\n\#ifdef NSFoundationVersionNumber_iOS_9_x_Max/, "");
+    rf = rf.replace(/\n\#import \<UserNotifications\/UserNotifications\.h\>/, "");
+    rf = rf.replace(/\n\#endif/, "");
+
+    // 插入 头文件
+    rf = rf.replace(/#import "AppDelegate.h"/, "\#import \"AppDelegate.h\"\n\#import \<RCTPushNotificationManager.h\>\n\#ifdef NSFoundationVersionNumber_iOS_9_x_Max\n\#import \<UserNotifications\/UserNotifications\.h\>\n\#endif");
+    fs.writeFileSync(path, rf, "utf-8");
+
+
+    // 这个是删除代码的脚本 uninstall
+    // var rf = fs.readFileSync(path,"utf-8");
+    // rf = rf.replace(/#import "AppDelegate.h"[*\n]#import <RCTJPushModule.h>/,"\#import \"AppDelegate.h\"");
+    // fs.writeFileSync(path, rf, "utf-8");
+
+    // 插入 注册推送 和启动jpush sdk
+    // - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+    // {
+    var rf = fs.readFileSync(path, "utf-8");
+    var searchDidlaunch = rf.match(/\n.*didFinishLaunchingWithOptions.*\n?\{/);
+    if (searchDidlaunch == null) {
+        console.log("没有匹配到 didFinishLaunchingWithOptions");
+        console.log(rf);
+    } else {
+        // console.log(searchDidlaunch[0]);
+        var oldValue = rf.match(/\[JPUSHService registerForRemoteNotificationTypes/)
+        if (oldValue == null) {
+           rf = rf.replace(searchDidlaunch[0], `${searchDidlaunch[0]}
+           if ([[UIDevice currentDevice].systemVersion floatValue] >= 10.0) {
+    //iOS10特有
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    // 必须写代理，不然无法监听通知的接收与点击
+    center.delegate = self;
+    [center requestAuthorizationWithOptions:(UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound) completionHandler:^(BOOL granted, NSError * _Nullable error) {
+      if (granted) {
+        // 点击允许
+        NSLog(@"注册成功");
+        [center getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
+          NSLog(@"%@", settings);
+        }];
+      } else {
+        // 点击不允许
+        NSLog(@"注册失败");
+      }
+    }];
+  }else if ([[UIDevice currentDevice].systemVersion floatValue] >8.0){
+    //iOS8 - iOS10
+    [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge categories:nil]];
+    
+  }else if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
+    //iOS8系统以下
+    [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound];
+  }
+  // 注册获得device Token
+  [[UIApplication sharedApplication] registerForRemoteNotifications];     
+           `)     
+            fs.writeFileSync(path, rf, "utf-8");
+        }
+
+    }
+
+
+    //  这个插入代码 didRegisterForRemoteNotificationsWithDeviceToken
+    var rf = fs.readFileSync(path, "utf-8");
+    var search = rf.match(/\n.*didRegisterForRemoteNotificationsWithDeviceToken\:\(NSData \*\)deviceToken[ ]*\{/);
+
+    if (search == null) {
+        console.log("没有匹配到 函数 didRegisterForRemoteNotificationsWithDeviceToken");
+        rf = rf.replace(/\@end/, "\- \(void\)application\:\(UIApplication \*\)application\ didRegisterForRemoteNotificationsWithDeviceToken\:\(NSData \*\)deviceToken \{\n\[JPUSHService registerDeviceToken:deviceToken\]\;\n\}\n\@end");
+        // console.log(rf);
+        fs.writeFileSync(path, rf, "utf-8");
+    } else {
+        console.log(search[0]);
+        var oldValue = rf.match(/\[RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken/)
+        if (oldValue == null) {
+            rf = rf.replace(search[0], search[0] + `
+            [RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+  NSLog(@"注册devicetoken成功::%@",deviceToken);
+            `);
+            fs.writeFileSync(path, rf, "utf-8");
+        } else {
+            console.log("registerDeviceToken存在，不在插入");
+        }
+
+    }
+
+    // 这里插入 didRegisterUserNotificationSettings
+    var rf = fs.readFileSync(path, "utf-8");
+    var search = rf.match(/\n.*didRegisterUserNotificationSettings\:\(UIUserNotificationSettings \*\)notificationSettings/);
+    if (search == null) {
+        console.log("没有匹配到 函数 didRegisterUserNotificationSettings");
+        rf = rf.replace(/\@end/, `
+        // Required to register for notifications
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+{
+  [RCTPushNotificationManager didRegisterUserNotificationSettings:notificationSettings];
+}
+
+@end
+        `);
+        // console.log(rf);
+        fs.writeFileSync(path, rf, "utf-8");
+    }
+
+    // 这里插入 didReceiveRemoteNotification
+    var rf = fs.readFileSync(path, "utf-8");
+    var search = rf.match(/\n.*didReceiveRemoteNotification\:\(NSDictionary \*\)notification/);
+    if (search == null) {
+        console.log("没有匹配到 函数 didReceiveRemoteNotification");
+        rf = rf.replace(/\@end/, `
+        // Required for the notification event.
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification
+{
+  [RCTPushNotificationManager didReceiveRemoteNotification:notification];
+}
+
+@end
+        `);
+        // console.log(rf);
+        fs.writeFileSync(path, rf, "utf-8");
+    }
+
+    // 这里插入 didRegisterUserNotificationSettings
+    var rf = fs.readFileSync(path, "utf-8");
+    var search = rf.match(/\n.*didReceiveLocalNotification\:\(UILocalNotification \*\)notification/);
+    if (search == null) {
+        console.log("没有匹配到 函数 didReceiveLocalNotification");
+        rf = rf.replace(/\@end/, `
+ // Required for the localNotification event.
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+  [RCTPushNotificationManager didReceiveLocalNotification:notification];
+}
+
+@end
+        `);
+        // console.log(rf);
+        fs.writeFileSync(path, rf, "utf-8");
+    }
+}
+
 
 // 判断文件
 function exists(path) {
@@ -173,9 +323,9 @@ getAllfiles("./ios", function (f, s) {
     // 找到Appdelegate.m 文件 插入代码
     if (isAppdelegate != null) {
         console.log("the file is appdelegate:" + f);
-        insertJpushCode(f);
+        // insertJpushCode(f);
+        insertRCTPushCode(f);
     }
-
 });
 
 // getAndroidManifest("./android/" + moduleName, function(f, s) {
