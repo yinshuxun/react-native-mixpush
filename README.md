@@ -1,6 +1,6 @@
 # react-native-mixpush
 
-ios: 默认提供极光推送，在[apns分支](https://github.com/yinshuxun/react-native-mixpush.git#apns)分支上可通过自己搭建apns服务，可以直接走原生推送
+ios: 默认提供极光推送，在[apns分支](https://github.com/yinshuxun/react-native-mixpush/tree/apns)分支上可通过自己搭建apns服务，可以直接走原生推送
 
 android: 集成了小米推送和极光推送，可以任意选择或者匹配规则，默认规则 是小米手机采用小米推送，其他一律使用极光推送
 
@@ -9,7 +9,7 @@ android: 集成了小米推送和极光推送，可以任意选择或者匹配�
 
 
 ## 使用
-### 1、安装 (想使用苹果官方的apns推送，请看 [apns分支](https://github.com/yinshuxun/react-native-mixpush.git#apns) )
+### 1、安装 (想使用苹果官方的apns推送，请看 [apns分支](https://github.com/yinshuxun/react-native-mixpush/tree/apns) )
 ```
 npm install react-native-mixpush --save
 ```
