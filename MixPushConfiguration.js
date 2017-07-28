@@ -186,7 +186,7 @@ function insertRCTPushCode(path) {
         console.log(rf);
     } else {
         // console.log(searchDidlaunch[0]);
-        var oldValue = rf.match(/\[JPUSHService registerForRemoteNotificationTypes/)
+        var oldValue = rf.match(/registerForRemoteNotifications/)
         if (oldValue == null) {
            rf = rf.replace(searchDidlaunch[0], `${searchDidlaunch[0]}
            if ([[UIDevice currentDevice].systemVersion floatValue] >= 10.0) {
@@ -209,14 +209,14 @@ function insertRCTPushCode(path) {
   }else if ([[UIDevice currentDevice].systemVersion floatValue] >8.0){
     //iOS8 - iOS10
     [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge categories:nil]];
-    
+
   }else if ([[UIDevice currentDevice].systemVersion floatValue] < 8.0) {
     //iOS8系统以下
     [application registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound];
   }
   // 注册获得device Token
-  [[UIApplication sharedApplication] registerForRemoteNotifications];     
-           `)     
+  [[UIApplication sharedApplication] registerForRemoteNotifications];
+           `)
             fs.writeFileSync(path, rf, "utf-8");
         }
 
@@ -229,7 +229,15 @@ function insertRCTPushCode(path) {
 
     if (search == null) {
         console.log("没有匹配到 函数 didRegisterForRemoteNotificationsWithDeviceToken");
-        rf = rf.replace(/\@end/, "\- \(void\)application\:\(UIApplication \*\)application\ didRegisterForRemoteNotificationsWithDeviceToken\:\(NSData \*\)deviceToken \{\n\[JPUSHService registerDeviceToken:deviceToken\]\;\n\}\n\@end");
+        rf = rf.replace(/\@end/, `
+        // Required for the register event.
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+    [RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    NSLog(@"注册devicetoken::%@",deviceToken);
+}
+
+@end`);
         // console.log(rf);
         fs.writeFileSync(path, rf, "utf-8");
     } else {
@@ -237,8 +245,8 @@ function insertRCTPushCode(path) {
         var oldValue = rf.match(/\[RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken/)
         if (oldValue == null) {
             rf = rf.replace(search[0], search[0] + `
-            [RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-  NSLog(@"注册devicetoken成功::%@",deviceToken);
+[RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+NSLog(@"注册devicetoken成功::%@",deviceToken);
             `);
             fs.writeFileSync(path, rf, "utf-8");
         } else {
