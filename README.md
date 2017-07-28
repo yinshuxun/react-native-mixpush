@@ -28,7 +28,7 @@ npm run configureMixPush 913c24e53c0d7ede41e828ae 2882303761517599402 5351759930
 
 - 在 xcode8 之后需要点开推送选项： TARGETS -> Capabilities -> Push Notification 设为 on 状态
 
-### 5、配置APNS服务，这里提供一个简单的[例子](./APNS.js)
+### 5、配置APNS服务，这里提供一个简单的[例子](./APNS.js),你的devicetoken请看xcode真机调试启动日志,[devicetoken部分](./devicetoken.png)
 ```
 node APNS.js //即可收到推送
 ```
